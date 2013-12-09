@@ -138,7 +138,34 @@ public class Triangle extends Surface {
   public void computeBoundingBox() {
     // TODO: Compute the bounding box and store the result in
     // averagePosition, minBound, and maxBound.
-
+	
+	minBound = new Point3(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+	maxBound = new Point3(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+	// Initialize
+	Point3[] v = new Point3[3];
+	v[0] = new Point3(owner.getVertex(index[0]));
+	v[1] = new Point3(owner.getVertex(index[1]));
+	v[2] = new Point3(owner.getVertex(index[2]));
+	// Update minBound and maxBound
+	for (int i = 0; i < 3; i++)
+	{
+		tMat.rightMultiply(v[i]);
+    	if (v[i].x < minBound.x)
+    		minBound.x = v[i].x;
+    	if (v[i].x > maxBound.x)
+    		maxBound.x = v[i].x;
+    	if (v[i].y < minBound.y)
+    		minBound.y = v[i].y;
+    	if (v[i].y > maxBound.y)
+    		maxBound.y = v[i].y;
+    	if (v[i].z < minBound.z)
+    		minBound.z = v[i].z;
+    	if (v[i].z > maxBound.z)
+    		maxBound.z = v[i].z;
+    }
+	// Compute the average position
+	averagePosition = new Point3((v[0].x+v[1].x+v[2].x)/3.0, (v[0].y+v[1].y+v[2].y)/3.0, (v[0].z+v[1].z+v[2].z)/3.0);
+	
   }
 
   /**

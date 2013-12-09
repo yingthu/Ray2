@@ -145,7 +145,44 @@ public class Cylinder extends Surface {
     // TODO: Compute the bounding box and store the result in
     // averagePosition, minBound, and maxBound.
     // Hint: The bounding box may be transformed by a transformation matrix.
-
+    
+	// Known center  
+	averagePosition = new Point3(center);
+    tMat.rightMultiply(averagePosition);
+    
+    minBound = new Point3(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+    maxBound = new Point3(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+    // Initialize
+    Point3[] v = new Point3[8];
+    for (int i = 0; i < 8; i++)
+    	v[i] = new Point3(center);
+    // Vertices of the box
+    v[0].add(new Vector3(-radius, -radius, -height/2.0));
+    v[1].add(new Vector3(-radius, radius, -height/2.0));
+    v[2].add(new Vector3(radius, -radius, -height/2.0));
+    v[3].add(new Vector3(radius, radius, -height/2.0));
+    v[4].add(new Vector3(-radius, -radius, height/2.0));
+    v[5].add(new Vector3(-radius, radius, height/2.0));
+    v[6].add(new Vector3(radius, -radius, height/2.0));
+    v[7].add(new Vector3(radius, radius, height/2.0));
+    // Update minBound and maxBound
+    for (int i = 0; i < 8; i++)
+    {
+    	tMat.rightMultiply(v[i]);
+    	if (v[i].x < minBound.x)
+    		minBound.x = v[i].x;
+    	if (v[i].x > maxBound.x)
+    		maxBound.x = v[i].x;
+    	if (v[i].y < minBound.y)
+    		minBound.y = v[i].y;
+    	if (v[i].y > maxBound.y)
+    		maxBound.y = v[i].y;
+    	if (v[i].z < minBound.z)
+    		minBound.z = v[i].z;
+    	if (v[i].z > maxBound.z)
+    		maxBound.z = v[i].z;
+    }
+    
   }
 
   /**

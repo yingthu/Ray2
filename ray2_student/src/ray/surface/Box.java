@@ -146,6 +146,37 @@ public class Box extends Surface {
     // averagePosition, minBound, and maxBound.
     // Hint: The bounding box is not the same as just minPt and maxPt, because 
     // this object can be transformed by a transformation matrix.
+    minBound = new Point3(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+    maxBound = new Point3(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+    // Eight vertices of the box
+    Point3[] v = new Point3[8];
+    v[0] = new Point3(minPt);
+    v[1] = new Point3(minPt.x, minPt.y, maxPt.z);
+    v[2] = new Point3(minPt.x, maxPt.y, minPt.z);
+    v[3] = new Point3(maxPt.x, minPt.y, minPt.z);
+    v[4] = new Point3(minPt.x, maxPt.y, maxPt.z);
+    v[5] = new Point3(maxPt.x, minPt.y, maxPt.z);
+    v[6] = new Point3(maxPt.x, maxPt.y, minPt.z);
+    v[7] = new Point3(maxPt);
+    // Update minBound and maxBound
+    for (int i = 0; i < 8; i++)
+    {
+    	tMat.rightMultiply(v[i]);
+    	if (v[i].x < minBound.x)
+    		minBound.x = v[i].x;
+    	if (v[i].x > maxBound.x)
+    		maxBound.x = v[i].x;
+    	if (v[i].y < minBound.y)
+    		minBound.y = v[i].y;
+    	if (v[i].y > maxBound.y)
+    		maxBound.y = v[i].y;
+    	if (v[i].z < minBound.z)
+    		minBound.z = v[i].z;
+    	if (v[i].z > maxBound.z)
+    		maxBound.z = v[i].z;
+    }
+    // Compute the average position
+    averagePosition = new Point3((minBound.x+maxBound.x)/2.0, (minBound.y+maxBound.y)/2.0, (minBound.z+maxBound.z)/2.0);
     
   }
   
