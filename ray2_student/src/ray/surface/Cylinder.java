@@ -35,7 +35,7 @@ public class Cylinder extends Surface {
   public boolean intersect(IntersectionRecord outRecord, Ray rayIn) {
 	// TODO: Process rayIn so that it is in the same coordinates as the object.
     // This should be a single line.
-
+	rayIn = untransformRay(rayIn);
     Ray ray = rayIn;
 
     // Rename the common vectors so I don't have to type so much
@@ -130,7 +130,10 @@ public class Cylinder extends Surface {
 
       outRecord.surface = this;
       // TODO: Transform the location and normal back into world coordinates.
-
+      // Transform the location by tMat
+      tMat.rightMultiply(outRecord.location);
+      // Transform the normal by tMatTInv
+      tMatTInv.rightMultiply(outRecord.normal);
       
       outRecord.normal.normalize();
     }
