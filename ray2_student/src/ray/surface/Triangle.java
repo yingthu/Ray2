@@ -67,11 +67,73 @@ public class Triangle extends Surface {
     // TODO: fill in this function.
     // Hint: This object can be transformed by a transformation matrix,
     // so the rayIn needs to be processed so that it is in the same coordinate as the object.
-
-  
-    return false;
-
-  }
+	rayIn = untransformRay(rayIn);
+	Ray ray = rayIn;
+	
+	// Coordinates of triangle vertex a
+	double xa = owner.getVertex(index[0]).x;
+	double ya = owner.getVertex(index[0]).y;
+	double za = owner.getVertex(index[0]).z;
+	// Coordinates of ray origin e
+	double xe = ray.origin.x;
+	double ye = ray.origin.y;
+	double ze = ray.origin.z;
+	// Coordinates of ray direction d
+	double xd = ray.direction.x;
+	double yd = ray.direction.y;
+	double zd = ray.direction.z;
+	
+	// Compute beta, gamma and t according to Shirley and Marschner 4.4.2
+	double ei_hf = e * zd - yd * f;
+	double gf_di = xd * f - d * zd;
+	double dh_eg = d * yd - e * xd;
+	double ak_jb = a * (ya - ye) - (xa - xe) * b;
+	double jc_al = (xa - xe) * c - a * (za - ze);
+	double bl_kc = b * (za - ze) - (ya - ye) * c;
+	double M = a * ei_hf + b * gf_di + c * dh_eg;
+	// Compute t first
+	double t = - (f * ak_jb + e * jc_al + d * bl_kc) / M;
+	if (t < ray.start || t > ray.end)
+		return false;
+	// Compute gamma
+	double gamma = (zd * ak_jb + yd * jc_al + xd * bl_kc) / M;
+	if (gamma < 0 || gamma > 1)
+		return false;
+	// Compute beta
+	double beta = ((xa-xe) * ei_hf + (ya-ye) * gf_di + (za-ze) * dh_eg) / M;
+	if (beta < 0 || beta > 1 - gamma)
+		return false;
+	
+	// Set the values
+	if (outRecord != null)
+	{
+		outRecord.t = t;
+	    ray.evaluate(outRecord.location, t);
+	    outRecord.surface = this;
+	    // Interpolate the normal using barycentric coordinates
+	    if (norm == null)
+	    {
+	    	double alpha = 1.0 - beta - gamma;
+	    	Vector3 an = owner.getNormal(index[0]);
+	    	Vector3 bn = owner.getNormal(index[1]);
+	    	Vector3 cn = owner.getNormal(index[2]);
+	    	an.scale(alpha);
+	    	bn.scale(beta);
+	    	cn.scale(gamma);
+	    	Vector3 n = new Vector3(an.x+bn.x+cn.x, an.y+bn.y+cn.y, an.z+bn.z+cn.z);
+	    	outRecord.normal.set(n);
+	    }
+	    else
+	    	outRecord.normal.set(norm);
+        // Transform the location by tMat
+	    tMat.rightMultiply(outRecord.location);
+	    // Transform the normal by tMatTInv
+	    tMatTInv.rightMultiply(outRecord.normal);
+	    outRecord.normal.normalize();
+	}
+	    
+	return true;
+}
 
   public void computeBoundingBox() {
     // TODO: Compute the bounding box and store the result in
