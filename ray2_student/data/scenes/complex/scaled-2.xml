@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--  A bunch of scaled cylinders.
+ -->
+<scene>
+  <camera type="ParallelCamera">
+    <viewPoint>30 6 31</viewPoint>
+    <viewDir>-5 -1 -5</viewDir>
+    <viewUp>0 0 1</viewUp>
+    <viewWidth>8</viewWidth>
+    <viewHeight>8</viewHeight>
+  </camera>
+  <image>
+    1024 1024
+  </image>
+  <shader name="gray" type="Lambertian">
+    <diffuseColor>.5 .5 .5</diffuseColor>
+  </shader>
+  <shader name="mat1" type="Phong">
+    <diffuseColor>0 1 1</diffuseColor>
+    <specularColor>1 0 0</specularColor>
+    <exponent>20</exponent>
+  </shader>
+  <shader name="mat2" type="Phong">
+    <diffuseColor>1 0 1</diffuseColor>
+    <specularColor>0 1 0</specularColor>
+    <exponent>20</exponent>
+  </shader>
+  <shader name="mat3" type="Glazed">
+    <refractiveIndex>1.5</refractiveIndex>
+    <substrate type="Phong">
+      <diffuseColor>1 1 0</diffuseColor>
+      <specularColor>0 0 1</specularColor>
+      <exponent>20</exponent>
+    </substrate>
+  </shader>
+  <shader name="glass" type="Glass">
+    <refractiveIndex>1.5</refractiveIndex>
+  </shader>
+  
+  <surface type="Cylinder">
+    <shader ref="mat1" />
+    <center>0 0 0</center>
+    <radius>1.5</radius>
+    <height>3</height>
+  </surface>
+  <surface type="Sphere">
+    <shader ref="glass" />
+    <center>0 0 5</center>
+    <radius>1.5</radius>
+  </surface>
+  <surface type="Box">
+    <shader ref="gray" />
+    <minPt>-100 -100 -10</minPt>
+    <maxPt>100 100 0</maxPt>
+  </surface>
+
+  <surface type="Group">
+    <translate name="t">0 0 0.3</translate>
+    <scale name="s">0.5 0.5 1.2</scale>
+    <surface type="Cylinder">
+      <shader ref="mat2" />
+      <center>4.5 0 0</center>
+      <radius>1.5</radius>
+      <height>3</height>
+    </surface>
+    <surface type="Cylinder">
+      <shader ref="mat2" />
+      <center>0 4.5 0</center>
+      <radius>1.5</radius>
+      <height>3</height>
+    </surface>
+    <surface type="Cylinder">
+      <shader ref="mat2" />
+      <center>-4.5 0 0</center>
+      <radius>1.5</radius>
+      <height>3</height>
+    </surface>
+    <surface type="Cylinder">
+      <shader ref="mat2" />
+      <center>0 -4.5 0</center>
+      <radius>1.5</radius>
+      <height>3</height>
+    </surface>
+
+    <surface type="Group">
+      <translate name="t">4.5 0 0.3</translate>
+      <scale name="s">0.5 0.5 1.2</scale>
+      <surface type="Cylinder">
+        <shader ref="mat3" />
+        <center>4.5 0 0</center>
+        <radius>1.5</radius>
+        <height>3</height>
+      </surface>
+      <surface type="Cylinder">
+        <shader ref="mat3" />
+        <center>0 4.5 0</center>
+        <radius>1.5</radius>
+        <height>3</height>
+      </surface>
+      <surface type="Cylinder">
+        <shader ref="mat3" />
+        <center>0 -4.5 0</center>
+        <radius>1.5</radius>
+        <height>3</height>
+      </surface>
+    </surface>
+
+    <surface type="Group">
+      <translate name="t">-4.5 0 0.3</translate>
+      <scale name="s">0.5 0.5 1.2</scale>
+      <surface type="Cylinder">
+        <shader ref="mat3" />
+        <center>-4.5 0 0</center>
+        <radius>1.5</radius>
+        <height>3</height>
+      </surface>
+      <surface type="Cylinder">
+        <shader ref="mat3" />
+        <center>0 4.5 0</center>
+        <radius>1.5</radius>
+        <height>3</height>
+      </surface>
+      <surface type="Cylinder">
+        <shader ref="mat3" />
+        <center>0 -4.5 0</center>
+        <radius>1.5</radius>
+        <height>3</height>
+      </surface>
+    </surface>
+
+    <surface type="Group">
+      <translate name="t">0 4.5 0.3</translate>
+      <scale name="s">0.5 0.5 1.2</scale>
+      <surface type="Cylinder">
+        <shader ref="mat3" />
+        <center>4.5 0 0</center>
+        <radius>1.5</radius>
+        <height>3</height>
+      </surface>
+      <surface type="Cylinder">
+        <shader ref="mat3" />
+        <center>0 4.5 0</center>
+        <radius>1.5</radius>
+        <height>3</height>
+      </surface>
+      <surface type="Cylinder">
+        <shader ref="mat3" />
+        <center>-4.5 0 0</center>
+        <radius>1.5</radius>
+        <height>3</height>
+      </surface>
+    </surface>
+
+    <surface type="Group">
+      <translate name="t">0 -4.5 0.3</translate>
+      <scale name="s">0.5 0.5 1.2</scale>
+      <surface type="Cylinder">
+        <shader ref="mat3" />
+        <center>4.5 0 0</center>
+        <radius>1.5</radius>
+        <height>3</height>
+      </surface>
+      <surface type="Cylinder">
+        <shader ref="mat3" />
+        <center>0 -4.5 0</center>
+        <radius>1.5</radius>
+        <height>3</height>
+      </surface>
+      <surface type="Cylinder">
+        <shader ref="mat3" />
+        <center>-4.5 0 0</center>
+        <radius>1.5</radius>
+        <height>3</height>
+      </surface>
+    </surface>
+  </surface>
+  
+  <light>
+    <position>0 0 100</position>
+    <intensity>1 1 1</intensity>
+  </light>
+
+  <light>
+    <position>100 0 0</position>
+    <intensity>0.5 0 0</intensity>
+  </light>
+
+  <light>
+    <position>0 100 0</position>
+    <intensity>0 0.5 0</intensity>
+  </light>
+
+  <light>
+    <position>0 0 100</position>
+    <intensity>0 0 0.5</intensity>
+  </light>
+</scene>
+

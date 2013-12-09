@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--  A series of transformed cubes.
+ -->
+<scene>
+  <samples>8</samples>
+  <camera type="PerspectiveCamera">
+    <viewPoint>70 7 70</viewPoint>
+    <viewDir>-1 0 -1</viewDir>
+    <viewUp>0 1 0</viewUp>
+    <projDistance>2</projDistance>
+    <viewWidth>0.5</viewWidth>
+    <viewHeight>0.5</viewHeight>
+  </camera>
+  <image>
+    1024 1024
+  </image>
+  <shader name="gray" type="Lambertian">
+    <diffuseColor>0.6 0.6 0.6</diffuseColor>
+  </shader>
+  <shader name="glass" type="Glass">
+    <refractiveIndex>1.5</refractiveIndex>
+  </shader>
+
+  <surface type="Box">
+    <shader ref="gray" />
+    <minPt>-100 -100 -101</minPt>
+    <maxPt>100 100 -100</maxPt>
+  </surface>
+
+  <surface type="Sphere">
+    <shader ref="glass" />
+    <center>40 7 40</center>
+    <radius>4</radius>
+  </surface>
+
+  <surface type="Group">
+    <translate name="t">4 0 0</translate>
+    <rotate name="r">15 30 0 </rotate>
+    <surface type="Box">
+      <shader ref="gray" />
+      <minPt>-1 -1 -1</minPt>
+      <maxPt> 1  1  1</maxPt>
+    </surface>
+
+  <surface type="Group">
+    <translate ref="t"/>
+    <rotate ref="r"/>
+    <surface type="Box">
+      <shader ref="gray" />
+      <minPt>-1 -1 -1</minPt>
+      <maxPt> 1  1  1</maxPt>
+    </surface>
+
+  <surface type="Group">
+    <translate ref="t"/>
+    <rotate ref="r"/>
+    <surface type="Box">
+      <shader ref="gray" />
+      <minPt>-1 -1 -1</minPt>
+      <maxPt> 1  1  1</maxPt>
+    </surface>
+
+    <surface type="Group">
+    <translate ref="t"/>
+    <rotate ref="r"/>
+    <surface type="Box">
+      <shader ref="gray" />
+      <minPt>-1 -1 -1</minPt>
+      <maxPt> 1  1  1</maxPt>
+    </surface>
+
+  <surface type="Group">
+    <translate ref="t"/>
+    <rotate ref="r"/>
+    <surface type="Box">
+      <shader ref="gray" />
+      <minPt>-1 -1 -1</minPt>
+      <maxPt> 1  1  1</maxPt>
+    </surface>
+
+  <surface type="Group">
+    <translate ref="t"/>
+    <rotate ref="r"/>
+    <surface type="Box">
+      <shader ref="gray" />
+      <minPt>-1 -1 -1</minPt>
+      <maxPt> 1  1  1</maxPt>
+    </surface>
+
+  <surface type="Group">
+    <translate ref="t"/>
+    <rotate ref="r"/>
+    <surface type="Box">
+      <shader ref="gray" />
+      <minPt>-1 -1 -1</minPt>
+      <maxPt> 1  1  1</maxPt>
+    </surface>
+
+  <surface type="Group">
+    <translate ref="t"/>
+    <rotate ref="r"/>
+    <surface type="Box">
+      <shader ref="gray" />
+      <minPt>-1 -1 -1</minPt>
+      <maxPt> 1  1  1</maxPt>
+    </surface>
+
+  <surface type="Group">
+    <translate ref="t"/>
+    <rotate ref="r"/>
+    <surface type="Box">
+      <shader ref="gray" />
+      <minPt>-1 -1 -1</minPt>
+      <maxPt> 1  1  1</maxPt>
+    </surface>
+
+  </surface>
+  </surface>
+  </surface>
+  </surface>
+  </surface>
+  </surface>
+  </surface>
+  </surface>
+  </surface>
+  
+  <light>
+    <position>100 100 100</position>
+    <intensity>0.1 0.1 0.1</intensity>
+  </light>
+
+  <light>
+    <position>100 0 0</position>
+    <intensity>1 0 0</intensity>
+  </light>
+
+  <light>
+    <position>0 100 0</position>
+    <intensity>0 1 0</intensity>
+  </light>
+
+  <light>
+    <position>0 0 100</position>
+    <intensity>0 0 1</intensity>
+  </light>
+</scene>
+
