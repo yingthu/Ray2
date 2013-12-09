@@ -36,9 +36,25 @@ public class Group extends Surface {
     // TODO: Compute tMat, tMatInv, tMatTInv using transformMat.
     // Hint: We apply the transformation from bottom up the tree. 
     // i.e. The child's transformation will be applied to objects before its parent's.
+	
+	// tMat = cMat * transformMat
+    tMat = new Matrix4(transformMat);
+    tMat.leftCompose(cMat);
+    // inverse of tMat
+    tMatInv = new Matrix4(tMat);
+    tMatInv.invert();
+    // inverse transpose of tMat
+    tMatTInv = new Matrix4(tMat);
+    tMatTInv.transpose();
+    tMatTInv.invert();
     
     // TODO: Call setTransformation(tMat, tMatInv, tMatTInv) on each of the children.
-    
+    for (Iterator<Surface> iter = objs.iterator(); iter.hasNext();)
+    {
+    	Surface s = iter.next();
+    	s.setTransformation(tMat, tMatInv, tMatTInv);
+    	
+    }
 
     computeBoundingBox();
   }
@@ -51,12 +67,20 @@ public class Group extends Surface {
   
   public void setRotate(Point3 R) {
     // TODO: add rotation to transformMat
-
+	
+	// transformMat_new = transformMat * Rz * Ry * Rx
+	tmp.setRotate(R.z, new Vector3(0.0, 0.0, 1.0));
+	transformMat.rightCompose(tmp);
+	tmp.setRotate(R.y, new Vector3(0.0, 1.0, 0.0));
+	transformMat.rightCompose(tmp);
+	tmp.setRotate(R.z, new Vector3(1.0, 0.0, 0.0));
+	transformMat.rightCompose(tmp);
   }
   
   public void setScale(Vector3 S) { 
     // TODO: add scale to transformMat
-
+    tmp.setScale(S);
+    transformMat.rightCompose(tmp);
   }
   
   public void addSurface(Surface a) {
