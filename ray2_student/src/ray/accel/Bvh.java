@@ -57,8 +57,51 @@ public class Bvh implements AccelStruct {
 		// TODO: fill in this function.
 		// Hint: For a leaf node, use a normal linear search. Otherwise, search in the left and right children.
 		// Another hint: save time by checking if the ray intersects the node first before checking the children.
-
-		return false;
+		if (node == null)
+			return false;
+		// Check whether they ray hits the node or not
+		if (!node.intersects(rayIn))
+			return false;
+		
+		// If node is a leaf
+		if (node.isLeaf())
+		{
+			boolean retVal = false;
+			IntersectionRecord tmpRecord = new IntersectionRecord();
+			Ray ray = new Ray(rayIn.origin, rayIn.direction);
+			ray.start = rayIn.start;
+			ray.end = rayIn.end;
+			
+			for (int i = node.surfaceIndexStart; i < node.surfaceIndexEnd; i++)
+			{
+				if (surfaces[i].intersect(tmpRecord, ray))
+				{
+					if (anyIntersection)
+						return true;
+					retVal = true;
+					ray.end = tmpRecord.t;
+					if (outRecord != null)
+						outRecord.set(tmpRecord);
+				}
+			}
+			return retVal;
+		}
+		// Recursive call
+		if (anyIntersection)
+			return intersectHelper(node.child[0], outRecord, rayIn, anyIntersection) || intersectHelper(node.child[1], outRecord, rayIn, anyIntersection);
+		else
+		{
+			IntersectionRecord leftRecord = new IntersectionRecord();
+			IntersectionRecord rightRecord = new IntersectionRecord();
+			boolean leftVal = intersectHelper(node.child[0], leftRecord, rayIn, anyIntersection);
+			boolean rightVal = intersectHelper(node.child[1], rightRecord, rayIn, anyIntersection);
+			if (leftRecord.surface != null && (leftRecord.t < rightRecord.t || rightRecord.surface == null))
+				outRecord.set(leftRecord);
+			else if (rightRecord.surface != null && (rightRecord.t < leftRecord.t || leftRecord.surface == null))
+				outRecord.set(rightRecord);
+			return leftVal || rightVal;
+		}
+		
 	}
 
 
@@ -85,23 +128,65 @@ public class Bvh implements AccelStruct {
 		// Find out the BIG bounding box enclosing all the surfaces in the range [start, end)
 		// and store them in minB and maxB.
 		// Hint: To find the bounding box for each surface, use getMinBound() and getMaxBound() */
-
+		// Initialize
+		Point3 minBigBound = new Point3(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+		Point3 maxBigBound = new Point3(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+		// Loop through surfaces
+		for (int i = start; i < end; i++)
+		{
+			// Current min and max
+			Point3 minTmp = surfaces[i].getMinBound();
+			Point3 maxTmp = surfaces[i].getMaxBound();
+			// Update min and max
+			if (minTmp.x < minBigBound.x)
+				minBigBound.x = minTmp.x;
+			if (minTmp.y < minBigBound.y)
+				minBigBound.y = minTmp.y;
+			if (minTmp.z < minBigBound.z)
+				minBigBound.z = minTmp.z;
+			if (maxTmp.x > maxBigBound.x)
+				maxBigBound.x = maxTmp.x;
+			if (maxTmp.y > maxBigBound.y)
+				maxBigBound.y = maxTmp.y;
+			if (maxTmp.z > maxBigBound.z)
+				maxBigBound.z = maxTmp.z;
+		}
+		
 		// ==== Step 2 ====
 		// Check for the base case. 
 		// If the range [start, end) is small enough, just return a new leaf node.
-
+		if (end - start <= 2)
+			return new BvhNode(minBigBound, maxBigBound, null, null, start, end);
+		
 		// ==== Step 3 ====
 		// Figure out the widest dimension (x or y or z).
 		// If x is the widest, set widestDim = 0. If y, set widestDim = 1. If z, set widestDim = 2.
-
+		int widestDim = 0;
+		double xWidth = maxBigBound.x - minBigBound.x;
+		double yWidth = maxBigBound.y - minBigBound.y;
+		double zWidth = maxBigBound.z - minBigBound.z;
+		if (yWidth > xWidth)
+		{
+			if (yWidth > zWidth)
+				widestDim = 1;
+			else
+				widestDim = 2;
+		}
+		else if (zWidth > xWidth)
+			widestDim = 2;
+		
 		// ==== Step 4 ====
 		// Sort surfaces according to the widest dimension.
 		// You can also implement O(n) randomized splitting algorithm.
-
+		cmp.setIndex(widestDim);
+		Arrays.sort(surfaces, start, end, cmp);
+		
 		// ==== Step 5 ====
 		// Recursively create left and right children.
-
-		return null;
+		BvhNode leftChild = createTree(start, (start+end)/2);
+		BvhNode rightChild = createTree((start+end)/2, end);
+		return new BvhNode(minBigBound, maxBigBound, leftChild, rightChild, start, end);
+		
 	}
 
 }

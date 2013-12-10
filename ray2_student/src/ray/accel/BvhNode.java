@@ -86,7 +86,78 @@ public class BvhNode {
 	public boolean intersects(Ray ray) {
 		// TODO: fill in this function.
 		// Hint: reuse your code from box intersection.
+	    
+		// Specify the two variables to reuse the code from Box
+	    Point3 minPt = new Point3(minBound);
+	    Point3 maxPt = new Point3(maxBound);
+	    
+	    // Copied from Box.java
+	    Point3 o = ray.origin;
+	    Vector3 d = ray.direction;
+	    
+	    double ox = o.x;
+	    double oy = o.y;
+	    double oz = o.z;
+	    double dx = d.x;
+	    double dy = d.y;
+	    double dz = d.z;
+	    
+	    // a three-slab intersection test. We'll get in and out t values for
+	    // all three axes. For instance on the x axis:
+	    // o.x + t d.x = 1 => t = (1 - o.x) / d.x
+	    // o.x + t d.x = -1 => t = (-1 - o.x) / d.x
+	    // This code is straight from Shirley's section 10.9.1
 
-		return false;
+	    double tMin = ray.start, tMax = ray.end;
+
+	    double txMin, txMax;
+	    if (dx >= 0) {
+	      txMin = (minPt.x - ox) / dx;
+	      txMax = (maxPt.x - ox) / dx;
+	    }
+	    else {
+	      txMin = (maxPt.x - ox) / dx;
+	      txMax = (minPt.x - ox) / dx;
+	    }
+	    if (tMin > txMax || txMin > tMax)
+	      return false;
+	    if (txMin > tMin)
+	      tMin = txMin;
+	    if (txMax < tMax)
+	      tMax = txMax;
+	  
+	    double tyMin, tyMax;
+	    if (dy >= 0) {
+	      tyMin = (minPt.y - oy) / dy;
+	      tyMax = (maxPt.y - oy) / dy;
+	    }
+	    else {
+	      tyMin = (maxPt.y - oy) / dy;
+	      tyMax = (minPt.y - oy) / dy;
+	    }
+	    if (tMin > tyMax || tyMin > tMax)
+	      return false;
+	    if (tyMin > tMin)
+	      tMin = tyMin;
+	    if (tyMax < tMax)
+	      tMax = tyMax;
+	    
+	    double tzMin, tzMax;
+	    if (dz >= 0) {
+	      tzMin = (minPt.z - oz) / dz;
+	      tzMax = (maxPt.z - oz) / dz;
+	    }
+	    else {
+	      tzMin = (maxPt.z - oz) / dz;
+	      tzMax = (minPt.z - oz) / dz;
+	    }
+	    if (tMin > tzMax || tzMin > tMax)
+	      return false;
+	    if (tzMin > tMin)
+	      tMin = tzMin;
+	    if (tzMax < tMax)
+	      tMax = tzMax;
+	    
+	    return true;
 	}
 }
