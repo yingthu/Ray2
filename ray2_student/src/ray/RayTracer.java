@@ -151,11 +151,17 @@ public class RayTracer {
 
 				// TODO: Implement supersampling for antialiasing.
 				// Each pixel should have (samples*samples) subpixels.
-				
-				cam.getRay(ray, (x + 0.5) / width, (y + 0.5) / height);	
-				ray.setAbsorption(scene.getAbsorption());
-				shadeRay(rayColor, scene, ray, 1);
-				pixelColor.add(rayColor);
+				rayColor.set(0, 0, 0);
+				for (int i = 0; i < samples; i++)
+					for (int j = 0; j < samples; j++)
+					{
+						rayColor.set(0, 0, 0);
+						cam.getRay(ray, (x + (i+0.5)/samples) / width, (y + (j+0.5)/samples) / height);	
+						ray.setAbsorption(scene.getAbsorption());
+						shadeRay(rayColor, scene, ray, 1);
+						pixelColor.add(rayColor);
+					}
+				pixelColor.scale(sInvSqr);
 
 				
 
@@ -188,7 +194,9 @@ public class RayTracer {
 		outColor.set(0, 0, 0);
 		
 		// TODO: Return immediately if depth is greater than MAX_DEPTH.  	   
-
+		if (depth > MAX_DEPTH)
+			return;
+		
 		IntersectionRecord intersectionRecord = new IntersectionRecord();			
 
 		if (!scene.getFirstIntersection(intersectionRecord, ray))

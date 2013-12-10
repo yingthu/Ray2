@@ -155,7 +155,7 @@ public class Bvh implements AccelStruct {
 		// ==== Step 2 ====
 		// Check for the base case. 
 		// If the range [start, end) is small enough, just return a new leaf node.
-		if (end - start <= 2)
+		if (end - start <= 10)
 			return new BvhNode(minBigBound, maxBigBound, null, null, start, end);
 		
 		// ==== Step 3 ====
