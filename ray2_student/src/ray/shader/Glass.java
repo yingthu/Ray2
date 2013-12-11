@@ -119,6 +119,8 @@ public class Glass extends Shader {
 			RayTracer.shadeRay(outIntensity, scene, refractedRay, depth);
 			outIntensity.scale(1-fresnel);
 			outIntensity.add(reflectedColor);
+			ray.setAbsorption(scene.getAbsorption());
+			ray.attenuate(outIntensity, record.location);
 		}
 		
 	}

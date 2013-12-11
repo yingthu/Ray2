@@ -66,10 +66,10 @@ public class Scene {
 	/** The acceleration structure **/
 	// TODO: Change this to:
 	
-	// protected AccelStruct accelStruct = new Bvh();
+	protected AccelStruct accelStruct = new Bvh();
 	
 	// ...when you are finished with Bvh and BvhNode.
-	protected AccelStruct accelStruct = new NaiveAccelStruct();
+	// protected AccelStruct accelStruct = new NaiveAccelStruct();
 	public void setAccelStruct(AccelStruct accelStruct) { this.accelStruct = accelStruct; }
 	public AccelStruct getAccelStruct() { return accelStruct; }
 	

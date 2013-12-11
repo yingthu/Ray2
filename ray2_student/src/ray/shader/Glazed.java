@@ -93,7 +93,8 @@ public class Glazed extends Shader {
 		Color reflectedColor = new Color();
 		RayTracer.shadeRay(reflectedColor, scene, reflectedRay, depth);
 		reflectedColor.scale(fresnel);
-
+		ray.setAbsorption(scene.getAbsorption());
+		ray.attenuate(reflectedColor, record.location);
 		/* substrate material */
 		substrate.shade(outIntensity, scene, ray, record, depth);
 		

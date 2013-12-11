@@ -110,7 +110,12 @@ public class Ray {
    */
   public void attenuate(Color inColor, Point3 endPoint) {
 	  // TODO: fill in this function.
-
+	  // Distance that ray traveled through
+	  double l = endPoint.distance(origin);
+	  // Scale down
+	  inColor.r *= Math.exp(-absorption.r*l);
+	  inColor.g *= Math.exp(-absorption.g*l);
+	  inColor.b *= Math.exp(-absorption.b*l);
   }	
   
   /**
